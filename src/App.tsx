@@ -17,6 +17,7 @@ import ComplaintView from './pages/ComplaintView';
 import SpotifyView from './pages/SpotifyView';
 import VolunteerView from './pages/VolunteerView';
 import VrittiChatView from './pages/VrittiChatView';
+import VrittiAIWidget from './Vapi';
 
 function App() {
   const location = useLocation();
@@ -24,6 +25,7 @@ function App() {
   return (
     <>
       <Toaster position="top-right" reverseOrder={false} />
+        <VrittiAIWidget />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<LandingPage />} />
