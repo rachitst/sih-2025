@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 const navLinks = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/chat', icon: MessageSquare, label: 'Vritti AI' },
-  { to: '/resources', icon: BookOpen, label: 'PsychoHub' },
+  { to: '/resources', icon: BookOpen, label: 'Resource Vault' },
   { to: '/booking', icon: Calendar, label: 'Book a Session' },
   { to: '/support', icon: Users, label: 'Support Network' },
   { to: '/complaint', icon: MessageSquareWarning, label: 'Complaint Box' },

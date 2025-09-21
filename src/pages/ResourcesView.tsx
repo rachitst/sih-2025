@@ -168,7 +168,7 @@ const ResourcesView = () => {
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-neutral-dark mb-2 flex items-center gap-2">
           <BookOpen className="h-6 w-6 text-primary" />
-          PsychoHub
+          Resource Vault
         </h1>
         <p className="text-neutral-medium">
           Explore our curated collection of mental wellness resources.
