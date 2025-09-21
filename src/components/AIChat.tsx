@@ -1,42 +1,114 @@
 import { Send } from 'lucide-react';
+import { useState } from 'react';
+
+interface Message {
+  content: string;
+  isUser: boolean;
+}
 
 const AIChat = () => {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [inputMessage, setInputMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const sendMessage = async () => {
+    if (!inputMessage.trim()) return;
+
+    const userMessage = { content: inputMessage, isUser: true };
+    setMessages(prev => [...prev, userMessage]);
+    setInputMessage('');
+    setIsLoading(true);
+
+    try {
+      const apiKey = "AIzaSyDCcSs9sHJyk4GXvyQWQOLO3woa5Co5PZU";
+      if (!apiKey) {
+        throw new Error("GEMINI_API_KEY is not set in the environment variables.");
+      }
+
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+      const prompt = `
+        You are Vritti, an AI therapist and counselor focused on student mental health and well-being.
+        Your role is to provide empathetic, supportive responses while helping students manage their
+        mental health, academic stress, and personal development.
+        
+        User message: ${inputMessage}
+      `;
+
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{
+              text: prompt
+            }]
+          }]
+        })
+      });
+
+      const data = await response.json();
+      const aiResponse = data.candidates[0].content.parts[0].text;
+
+      setMessages(prev => [...prev, { content: aiResponse, isUser: false }]);
+    } catch (error) {
+      console.error('Error calling Gemini API:', error);
+      setMessages(prev => [...prev, { 
+        content: "I apologize, but I'm having trouble connecting right now. Please try again in a moment.", 
+        isUser: false 
+      }]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  };
+
   return (
-    <div className="bg-white p-6 rounded-xl shadow-sm flex flex-col h-full">
+    <div className="bg-white p-6 rounded-xl shadow-sm flex flex-col h-[500px]">
       <h3 className="text-lg font-bold text-neutral-dark mb-4">AI Companion</h3>
       <div className="flex-grow space-y-4 overflow-y-auto pr-2">
-        {/* Student Message */}
-        <div className="flex justify-end">
-          <div className="bg-primary text-white p-3 rounded-lg max-w-xs">
-            I'm so stressed about my exams, I can't focus.
+        {messages.map((message, index) => (
+          <div key={index} className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}>
+            <div className={`${
+              message.isUser 
+                ? 'bg-primary text-white' 
+                : 'bg-neutral-light text-neutral-dark'
+              } p-3 rounded-lg max-w-xs`}>
+              {message.content}
+            </div>
           </div>
-        </div>
-        {/* AI Message */}
-        <div className="flex justify-start">
-          <div className="bg-neutral-light text-neutral-dark p-3 rounded-lg max-w-xs">
-            It sounds like exam pressure is making it difficult to concentrate. Can you tell me more about what 'can't focus' feels like for you right now?
+        ))}
+        {isLoading && (
+          <div className="flex justify-start">
+            <div className="bg-neutral-light text-neutral-dark p-3 rounded-lg">
+              Typing...
+            </div>
           </div>
-        </div>
-        {/* Student Message */}
-        <div className="flex justify-end">
-          <div className="bg-primary text-white p-3 rounded-lg max-w-xs">
-            It's like my brain is buzzing and I keep rereading the same page.
-          </div>
-        </div>
-         {/* AI Message */}
-        <div className="flex justify-start">
-          <div className="bg-neutral-light text-neutral-dark p-3 rounded-lg max-w-xs">
-            That buzzing feeling can be overwhelming. Let's try a quick 2-minute grounding exercise to help clear your thoughts. Are you open to that?
-          </div>
-        </div>
+        )}
       </div>
       <div className="mt-4 flex items-center">
         <input
           type="text"
-          placeholder="Message Aura AI..."
+          value={inputMessage}
+          onChange={(e) => setInputMessage(e.target.value)}
+          onKeyPress={handleKeyPress}
+          placeholder="Message Vritti..."
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none"
+          disabled={isLoading}
         />
-        <button className="ml-2 bg-primary text-white p-2 rounded-lg hover:bg-primary/90 transition-colors">
+        <button 
+          onClick={sendMessage} 
+          disabled={isLoading || !inputMessage.trim()}
+          className="ml-2 bg-primary text-white p-2 rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
           <Send className="h-5 w-5" />
         </button>
       </div>
