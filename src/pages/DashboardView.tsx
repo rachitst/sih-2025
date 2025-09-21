@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, BookOpen, AlertCircle, Wind, FileText, Users, Activity, BarChart, Heart, Bell, Smile, Frown, Meh, Award, Clock, Sun, Moon, Coffee, Zap, Music } from 'lucide-react';
+import { Calendar, BookOpen, AlertCircle, Wind, FileText, Users, Activity, BarChart, Heart, Bell, Smile, Frown, Meh, Award, Clock, Sun, Moon, Coffee, Zap, Music, MessageCircle, Target, Brain, Sparkles, Lightbulb, ChevronRight, CalendarClock } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 
@@ -201,13 +201,9 @@ const DashboardView = () => {
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-full bg-neutral-light overflow-hidden">
                   <img 
-                    src="/counselor.jpg" 
+                    src={`https://ui-avatars.com/api/?name=Dr.+Anya+Sharma&background=6366f1&color=fff&size=48`}
                     alt="Dr. Anya Sharma"
                     className="w-full h-full object-cover"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = 'https://via.placeholder.com/48?text=Dr.+A';
-                    }}
                   />
                 </div>
                 <div>
@@ -375,6 +371,16 @@ const DashboardView = () => {
                   <span className="capitalize">{currentMood}</span>
                 </div>
               </div>
+              
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-2">
+                  <div className="bg-purple-100 p-2 rounded-full">
+                    <Target className="h-4 w-4 text-purple-600" />
+                  </div>
+                  <span className="text-sm text-neutral-medium">Goals Completed</span>
+                </div>
+                <div className="font-medium">3/5</div>
+              </div>
             </div>
           </div>
         </motion.div>
@@ -413,6 +419,14 @@ const DashboardView = () => {
                   <p className="text-xs text-neutral-medium">Next Monday, 5:00 PM</p>
                 </div>
                 <p className="font-medium text-neutral-dark">Peer Support Group Meeting</p>
+              </div>
+              
+              <div className="border-l-4 border-purple-500 pl-3 py-1">
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-neutral-medium" />
+                  <p className="text-xs text-neutral-medium">Next Wednesday, 2:00 PM</p>
+                </div>
+                <p className="font-medium text-neutral-dark">Art Therapy Workshop</p>
               </div>
               
               <Link to="/booking">
@@ -460,6 +474,128 @@ const DashboardView = () => {
               >
                 Show another
               </button>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+      
+      {/* Third Row */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+        {/* Community Support */}
+        <motion.div 
+          whileHover={{ y: -5 }}
+          className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
+        >
+          <div className="p-6">
+            <h2 className="text-lg font-bold text-neutral-dark mb-4 flex items-center gap-2">
+              <MessageCircle className="h-5 w-5 text-primary" />
+              Community Support
+            </h2>
+            
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full overflow-hidden">
+                  <img 
+                    src={`https://ui-avatars.com/api/?name=Priya+Singh&background=6366f1&color=fff&size=40`}
+                    alt="Priya Singh"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="flex-1">
+                  <p className="font-medium text-sm text-neutral-dark">Priya Singh</p>
+                  <p className="text-xs text-neutral-medium">Shared a resource on anxiety management</p>
+                </div>
+                <span className="text-xs text-neutral-medium">2h ago</span>
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full overflow-hidden">
+                  <img 
+                    src={`https://ui-avatars.com/api/?name=Rahul+Kumar&background=6366f1&color=fff&size=40`}
+                    alt="Rahul Kumar"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="flex-1">
+                  <p className="font-medium text-sm text-neutral-dark">Rahul Kumar</p>
+                  <p className="text-xs text-neutral-medium">Posted in Stress Management group</p>
+                </div>
+                <span className="text-xs text-neutral-medium">5h ago</span>
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full overflow-hidden">
+                  <img 
+                    src={`https://ui-avatars.com/api/?name=Neha+Gupta&background=6366f1&color=fff&size=40`}
+                    alt="Neha Gupta"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="flex-1">
+                  <p className="font-medium text-sm text-neutral-dark">Neha Gupta</p>
+                  <p className="text-xs text-neutral-medium">Started a new discussion thread</p>
+                </div>
+                <span className="text-xs text-neutral-medium">1d ago</span>
+              </div>
+              
+              <Link to="/vritti-chat">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full mt-2 py-2 rounded-lg bg-primary/10 text-primary font-medium text-sm hover:bg-primary/20"
+                >
+                  View Community
+                </motion.button>
+              </Link>
+            </div>
+          </div>
+        </motion.div>
+        
+        {/* Additional Resources */}
+        <motion.div 
+          whileHover={{ y: -5 }}
+          className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
+        >
+          <div className="p-6">
+            <h2 className="text-lg font-bold text-neutral-dark mb-4 flex items-center gap-2">
+              <BookOpen className="h-5 w-5 text-primary" />
+              Additional Resources
+            </h2>
+            
+            <div className="space-y-3">
+              <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="bg-blue-500 p-2 rounded-full">
+                    <FileText className="w-5 h-5 text-white"/>
+                  </div>
+                  <p className="font-medium text-neutral-dark">Mental Health Articles</p>
+                </div>
+                <p className="text-sm text-neutral-medium ml-10">
+                  Expert-written articles on various mental health topics
+                </p>
+              </div>
+              
+              <div className="bg-gradient-to-r from-green-50 to-green-100 p-4 rounded-lg">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="bg-green-500 p-2 rounded-full">
+                    <Wind className="w-5 h-5 text-white"/>
+                  </div>
+                  <p className="font-medium text-neutral-dark">Guided Meditations</p>
+                </div>
+                <p className="text-sm text-neutral-medium ml-10">
+                  Audio sessions for relaxation and mindfulness practice
+                </p>
+              </div>
+              
+              <Link to="/resources">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full mt-2 py-2 rounded-lg bg-primary/10 text-primary font-medium text-sm hover:bg-primary/20"
+                >
+                  View All Resources
+                </motion.button>
+              </Link>
             </div>
           </div>
         </motion.div>
