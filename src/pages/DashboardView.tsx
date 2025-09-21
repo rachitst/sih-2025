@@ -1,12 +1,17 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, BookOpen, AlertCircle, Wind, FileText, Users } from 'lucide-react';
+import { Calendar, BookOpen, AlertCircle, Wind, FileText, Users, Activity, BarChart, Heart, Bell, Smile, Frown, Meh, Award, Clock, Sun, Moon, Coffee, Zap, Music } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { Link } from 'react-router-dom';
 
 const DashboardView = () => {
   const [userName, setUserName] = useState<string>('');
   const [phq9Score, setPHQ9Score] = useState<number | null>(null);
   const [phq9Severity, setPHQ9Severity] = useState<string>('');
+  const [currentMood, setCurrentMood] = useState<string>('neutral');
+  const [streakCount, setStreakCount] = useState<number>(3);
+  const [lastActivity, setLastActivity] = useState<string>('breathing exercise');
+  const [sleepHours, setSleepHours] = useState<number>(7);
 
   useEffect(() => {
     // Load user name from localStorage
@@ -20,6 +25,21 @@ const DashboardView = () => {
     const savedSeverity = localStorage.getItem('vritti_phq9_severity');
     if (savedScore) setPHQ9Score(parseInt(savedScore));
     if (savedSeverity) setPHQ9Severity(savedSeverity);
+    
+    // Load other user data (in a real app, this would come from an API)
+    const savedMood = localStorage.getItem('vritti_mood');
+    if (savedMood) setCurrentMood(savedMood);
+    
+    const savedStreak = localStorage.getItem('vritti_streak');
+    if (savedStreak) setStreakCount(parseInt(savedStreak));
+    else setStreakCount(Math.floor(Math.random() * 5) + 1);
+    
+    const savedActivity = localStorage.getItem('vritti_last_activity');
+    if (savedActivity) setLastActivity(savedActivity);
+    
+    const savedSleep = localStorage.getItem('vritti_sleep_hours');
+    if (savedSleep) setSleepHours(parseInt(savedSleep));
+    else setSleepHours(Math.floor(Math.random() * 3) + 6); // Random between 6-8 hours
   }, []);
 
   const getGreeting = () => {
@@ -31,6 +51,28 @@ const DashboardView = () => {
 
   const handleViewDetails = () => {
     toast.success('Viewing assessment details...');
+  };
+  
+  const handleMoodSelection = (mood: string) => {
+    setCurrentMood(mood);
+    localStorage.setItem('vritti_mood', mood);
+    toast.success(`Mood updated to ${mood}`);
+  };
+  
+  const handleActivityClick = (activity: string) => {
+    toast.success(`Starting ${activity}...`);
+    setLastActivity(activity.toLowerCase());
+    localStorage.setItem('vritti_last_activity', activity.toLowerCase());
+    // In a real app, this would navigate to the activity
+  };
+  
+  const getMoodIcon = (mood: string) => {
+    switch(mood) {
+      case 'happy': return <Smile className="h-6 w-6 text-green-500" />;
+      case 'sad': return <Frown className="h-6 w-6 text-blue-500" />;
+      case 'neutral': return <Meh className="h-6 w-6 text-yellow-500" />;
+      default: return <Meh className="h-6 w-6 text-yellow-500" />;
+    }
   };
 
   return (
@@ -45,6 +87,53 @@ const DashboardView = () => {
         </p>
       </div>
 
+      {/* Mood Tracker */}
+      <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden p-6">
+        <h2 className="text-lg font-bold text-neutral-dark mb-4 flex items-center gap-2">
+          <Heart className="h-5 w-5 text-primary" />
+          How are you feeling today?
+        </h2>
+        
+        <div className="flex justify-between items-center">
+          <div className="flex gap-4">
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => handleMoodSelection('happy')}
+              className={`p-3 rounded-full ${currentMood === 'happy' ? 'bg-green-100' : 'bg-neutral-light'}`}
+            >
+              <Smile className={`h-8 w-8 ${currentMood === 'happy' ? 'text-green-500' : 'text-neutral-medium'}`} />
+            </motion.button>
+            
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => handleMoodSelection('neutral')}
+              className={`p-3 rounded-full ${currentMood === 'neutral' ? 'bg-yellow-100' : 'bg-neutral-light'}`}
+            >
+              <Meh className={`h-8 w-8 ${currentMood === 'neutral' ? 'text-yellow-500' : 'text-neutral-medium'}`} />
+            </motion.button>
+            
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => handleMoodSelection('sad')}
+              className={`p-3 rounded-full ${currentMood === 'sad' ? 'bg-blue-100' : 'bg-neutral-light'}`}
+            >
+              <Frown className={`h-8 w-8 ${currentMood === 'sad' ? 'text-blue-500' : 'text-neutral-medium'}`} />
+            </motion.button>
+          </div>
+          
+          <div className="text-right">
+            <p className="text-sm text-neutral-medium">Your streak</p>
+            <div className="flex items-center justify-end gap-1">
+              <Award className="h-5 w-5 text-yellow-500" />
+              <span className="font-bold text-lg">{streakCount} days</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Assessment Summary Card */}
         <motion.div 
@@ -160,7 +249,7 @@ const DashboardView = () => {
                   key={index}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => toast.success(`Opening: ${item.title}`)}
+                  onClick={() => handleActivityClick(item.title)}
                   className="bg-neutral-light p-3 rounded-lg flex items-center gap-3 cursor-pointer"
                 >
                   <div className="bg-primary/10 p-2 rounded-md">
@@ -172,6 +261,205 @@ const DashboardView = () => {
                   </div>
                 </motion.div>
               ))}
+            </div>
+          </div>
+        </motion.div>
+        
+        {/* Activity Suggestions */}
+        <motion.div 
+          whileHover={{ y: -5 }}
+          className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden lg:col-span-1"
+        >
+          <div className="p-6">
+            <h2 className="text-lg font-bold text-neutral-dark mb-4 flex items-center gap-2">
+              <Activity className="h-5 w-5 text-primary" />
+              Suggested for You
+            </h2>
+            
+            <div className="space-y-3">
+              <Link to="/spotify">
+                <motion.div 
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="bg-gradient-to-r from-green-50 to-green-100 p-3 rounded-lg flex items-center gap-3 cursor-pointer"
+                >
+                  <div className="bg-green-500 p-2 rounded-md">
+                    <Music className="w-5 h-5 text-white"/>
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm text-neutral-dark">Calming Playlist</p>
+                    <p className="text-xs text-neutral-medium">Music • Spotify</p>
+                  </div>
+                </motion.div>
+              </Link>
+              
+              <Link to="/resources">
+                <motion.div 
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="bg-gradient-to-r from-blue-50 to-blue-100 p-3 rounded-lg flex items-center gap-3 cursor-pointer"
+                >
+                  <div className="bg-blue-500 p-2 rounded-md">
+                    <BookOpen className="w-5 h-5 text-white"/>
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm text-neutral-dark">Mindfulness Guide</p>
+                    <p className="text-xs text-neutral-medium">Video • 10 min</p>
+                  </div>
+                </motion.div>
+              </Link>
+              
+              <Link to="/volunteer">
+                <motion.div 
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="bg-gradient-to-r from-purple-50 to-purple-100 p-3 rounded-lg flex items-center gap-3 cursor-pointer"
+                >
+                  <div className="bg-purple-500 p-2 rounded-md">
+                    <Users className="w-5 h-5 text-white"/>
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm text-neutral-dark">Volunteer Opportunities</p>
+                    <p className="text-xs text-neutral-medium">Community • Engagement</p>
+                  </div>
+                </motion.div>
+              </Link>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+      
+      {/* Second Row */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+        {/* Wellness Stats */}
+        <motion.div 
+          whileHover={{ y: -5 }}
+          className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
+        >
+          <div className="p-6">
+            <h2 className="text-lg font-bold text-neutral-dark mb-4 flex items-center gap-2">
+              <BarChart className="h-5 w-5 text-primary" />
+              Your Wellness Stats
+            </h2>
+            
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-2">
+                  <div className="bg-blue-100 p-2 rounded-full">
+                    <Moon className="h-4 w-4 text-blue-600" />
+                  </div>
+                  <span className="text-sm text-neutral-medium">Sleep</span>
+                </div>
+                <div className="font-medium">{sleepHours} hours</div>
+              </div>
+              
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-2">
+                  <div className="bg-green-100 p-2 rounded-full">
+                    <Activity className="h-4 w-4 text-green-600" />
+                  </div>
+                  <span className="text-sm text-neutral-medium">Last Activity</span>
+                </div>
+                <div className="font-medium capitalize">{lastActivity}</div>
+              </div>
+              
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-2">
+                  <div className="bg-yellow-100 p-2 rounded-full">
+                    <Sun className="h-4 w-4 text-yellow-600" />
+                  </div>
+                  <span className="text-sm text-neutral-medium">Mood</span>
+                </div>
+                <div className="font-medium flex items-center gap-1">
+                  {getMoodIcon(currentMood)}
+                  <span className="capitalize">{currentMood}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+        
+        {/* Upcoming Events */}
+        <motion.div 
+          whileHover={{ y: -5 }}
+          className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
+        >
+          <div className="p-6">
+            <h2 className="text-lg font-bold text-neutral-dark mb-4 flex items-center gap-2">
+              <Bell className="h-5 w-5 text-primary" />
+              Upcoming Events
+            </h2>
+            
+            <div className="space-y-3">
+              <div className="border-l-4 border-primary pl-3 py-1">
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-neutral-medium" />
+                  <p className="text-xs text-neutral-medium">Tomorrow, 10:00 AM</p>
+                </div>
+                <p className="font-medium text-neutral-dark">Group Meditation Session</p>
+              </div>
+              
+              <div className="border-l-4 border-yellow-500 pl-3 py-1">
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-neutral-medium" />
+                  <p className="text-xs text-neutral-medium">Friday, 3:00 PM</p>
+                </div>
+                <p className="font-medium text-neutral-dark">Stress Management Workshop</p>
+              </div>
+              
+              <div className="border-l-4 border-green-500 pl-3 py-1">
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-neutral-medium" />
+                  <p className="text-xs text-neutral-medium">Next Monday, 5:00 PM</p>
+                </div>
+                <p className="font-medium text-neutral-dark">Peer Support Group Meeting</p>
+              </div>
+              
+              <Link to="/booking">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full mt-2 py-2 rounded-lg bg-primary/10 text-primary font-medium text-sm hover:bg-primary/20"
+                >
+                  View All Events
+                </motion.button>
+              </Link>
+            </div>
+          </div>
+        </motion.div>
+        
+        {/* Wellness Tips */}
+        <motion.div 
+          whileHover={{ y: -5 }}
+          className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
+        >
+          <div className="p-6">
+            <h2 className="text-lg font-bold text-neutral-dark mb-4 flex items-center gap-2">
+              <Zap className="h-5 w-5 text-primary" />
+              Daily Wellness Tip
+            </h2>
+            
+            <div className="bg-gradient-to-r from-primary/5 to-primary/10 p-4 rounded-lg">
+              <p className="text-neutral-dark font-medium mb-2">Mindful Moments</p>
+              <p className="text-sm text-neutral-medium">
+                Take 5 minutes today to practice mindful breathing. Find a quiet space, close your eyes, and focus on your breath. This simple practice can reduce stress and improve focus.
+              </p>
+            </div>
+            
+            <div className="mt-4 flex justify-between">
+              <button 
+                onClick={() => toast.success('Tip saved!')}
+                className="text-sm text-primary font-medium hover:underline"
+              >
+                Save for later
+              </button>
+              
+              <button 
+                onClick={() => toast.success('Showing new tip...')}
+                className="text-sm text-neutral-medium hover:text-neutral-dark"
+              >
+                Show another
+              </button>
             </div>
           </div>
         </motion.div>

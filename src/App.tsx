@@ -13,7 +13,10 @@ import ChatbotView from './pages/ChatbotView';
 import ResourcesView from './pages/ResourcesView';
 import BookingView from './pages/BookingView';
 import SupportView from './pages/SupportView';
-import ToolsView from './pages/ToolsView';
+import ComplaintView from './pages/ComplaintView';
+import SpotifyView from './pages/SpotifyView';
+import VolunteerView from './pages/VolunteerView';
+import VrittiChatView from './pages/VrittiChatView';
 
 function App() {
   const location = useLocation();
@@ -30,7 +33,11 @@ function App() {
             <Route path="/resources" element={<ResourcesView />} />
             <Route path="/booking" element={<BookingView />} />
             <Route path="/support" element={<SupportView />} />
-            <Route path="/tools" element={<ToolsView />} />
+
+            <Route path="/complaint" element={<ComplaintView />} />
+            <Route path="/spotify" element={<SpotifyView />} />
+            <Route path="/volunteer" element={<VolunteerView />} />
+            <Route path="/vritti-chat" element={<VrittiChatView />} />
             <Route path="/counsellor" element={<CounsellorPortal />} />
             <Route path="/admin" element={<AdminDashboard />} />
           </Route>

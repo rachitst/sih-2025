@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, MessageSquare, BookOpen, Calendar, Users, Radius, AlertOctagon } from 'lucide-react';
+import { LayoutDashboard, MessageSquare, BookOpen, Calendar, Users, MessageSquareWarning, Music, UserPlus, AlertOctagon } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const navLinks = [
@@ -8,7 +8,9 @@ const navLinks = [
   { to: '/resources', icon: BookOpen, label: 'PsychoHub' },
   { to: '/booking', icon: Calendar, label: 'Book a Session' },
   { to: '/support', icon: Users, label: 'Support Network' },
-  { to: '/tools', icon: Radius, label: 'Tools' },
+  { to: '/complaint', icon: MessageSquareWarning, label: 'Complaint Box' },
+  { to: '/spotify', icon: Music, label: 'Mood Playlist' },
+  { to: '/volunteer', icon: UserPlus, label: 'Volunteer' },
 ];
 
 const Sidebar = () => {
