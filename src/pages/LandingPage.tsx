@@ -62,13 +62,28 @@ const LandingPage = () => {
                 transition={{ duration: 0.3 }}
               />
             </Link>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+            <Link 
+              to="/counsellor" 
               className="hidden sm:block px-4 py-2 text-sm font-medium text-neutral-dark hover:text-primary transition-colors"
             >
-              Sign In
-            </motion.button>
+              <motion.span
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Counsellor Portal
+              </motion.span>
+            </Link>
+            <Link 
+              to="/admin" 
+              className="hidden sm:block px-4 py-2 text-sm font-medium text-neutral-dark hover:text-primary transition-colors"
+            >
+              <motion.span
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Admin Portal
+              </motion.span>
+            </Link>
           </motion.div>
         </nav>
       </motion.header>

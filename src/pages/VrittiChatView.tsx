@@ -39,11 +39,11 @@ const channels: Channel[] = [
 ];
 
 const directMessages: DirectMessage[] = [
-  { id: 'counselor1', name: 'Dr. Anya Sharma', avatar: '/counselor1.jpg', status: 'online' },
-  { id: 'counselor2', name: 'Dr. Rajiv Mehta', avatar: '/counselor2.jpg', status: 'idle' },
-  { id: 'peer1', name: 'Priya S.', avatar: '/peer1.jpg', status: 'online', unread: 2 },
-  { id: 'peer2', name: 'Arjun K.', avatar: '/peer2.jpg', status: 'offline' },
-  { id: 'peer3', name: 'Neha T.', avatar: '/peer3.jpg', status: 'dnd' },
+  { id: 'counselor1', name: 'Dr. Anya Sharma', avatar: 'https://ui-avatars.com/api/?name=Dr.+Anya+Sharma&background=4f46e5&color=fff&size=32', status: 'online' },
+  { id: 'counselor2', name: 'Dr. Rajiv Mehta', avatar: 'https://ui-avatars.com/api/?name=Dr.+Rajiv+Mehta&background=3b82f6&color=fff&size=32', status: 'idle' },
+  { id: 'peer1', name: 'Priya S.', avatar: 'https://ui-avatars.com/api/?name=Priya+S.&background=ec4899&color=fff&size=32', status: 'online', unread: 2 },
+  { id: 'peer2', name: 'Arjun K.', avatar: 'https://ui-avatars.com/api/?name=Arjun+K.&background=14b8a6&color=fff&size=32', status: 'offline' },
+  { id: 'peer3', name: 'Neha T.', avatar: 'https://ui-avatars.com/api/?name=Neha+T.&background=f59e0b&color=fff&size=32', status: 'dnd' },
 ];
 
 const initialMessages: Record<string, Message[]> = {
@@ -231,9 +231,9 @@ const VrittiChatView = () => {
     <div className="h-full flex flex-col">
       <div className="flex h-full">
         {/* Sidebar */}
-        <div className="w-64 bg-neutral-800 text-white flex flex-col h-full">
-          <div className="p-4 border-b border-neutral-700">
-            <h2 className="text-xl font-bold flex items-center gap-2">
+        <div className="w-64 bg-white shadow-md text-neutral-medium flex flex-col h-full border-r border-gray-100">
+          <div className="p-4 border-b border-gray-100">
+            <h2 className="text-xl font-bold flex items-center gap-2 text-primary">
               <MessageCircle className="h-5 w-5" />
               Vritti Chat
             </h2>
@@ -242,8 +242,8 @@ const VrittiChatView = () => {
           <div className="flex-1 overflow-y-auto">
             <div className="p-4">
               <div className="flex items-center justify-between mb-2">
-                <h3 className="text-neutral-400 text-sm font-medium uppercase">Channels</h3>
-                <button className="text-neutral-400 hover:text-white">
+                <h3 className="text-neutral-medium text-sm font-medium uppercase">Channels</h3>
+                <button className="text-neutral-medium hover:text-primary">
                   <Plus className="h-4 w-4" />
                 </button>
               </div>
@@ -253,7 +253,7 @@ const VrittiChatView = () => {
                   <button
                     key={channel.id}
                     onClick={() => handleChannelSelect(channel.id)}
-                    className={`w-full flex items-center gap-2 px-2 py-1 rounded ${channel.isActive ? 'bg-primary text-white' : 'text-neutral-300 hover:bg-neutral-700'}`}
+                    className={`w-full flex items-center gap-2 px-2 py-1 rounded ${channel.isActive ? 'bg-primary/10 text-primary' : 'text-neutral-medium hover:bg-neutral-light'}`}
                   >
                     {channel.type === 'text' ? (
                       <Hash className="h-4 w-4 flex-shrink-0" />
@@ -273,8 +273,8 @@ const VrittiChatView = () => {
             
             <div className="p-4">
               <div className="flex items-center justify-between mb-2">
-                <h3 className="text-neutral-400 text-sm font-medium uppercase">Direct Messages</h3>
-                <button className="text-neutral-400 hover:text-white">
+                <h3 className="text-neutral-medium text-sm font-medium uppercase">Direct Messages</h3>
+                <button className="text-neutral-medium hover:text-primary">
                   <Plus className="h-4 w-4" />
                 </button>
               </div>
@@ -283,22 +283,18 @@ const VrittiChatView = () => {
                 {directMessages.map(dm => (
                   <button
                     key={dm.id}
-                    className="w-full flex items-center gap-2 px-2 py-1 rounded text-neutral-300 hover:bg-neutral-700"
+                    className="w-full flex items-center gap-2 px-2 py-1 rounded text-neutral-medium hover:bg-neutral-light"
                   >
                     <div className="relative flex-shrink-0">
-                      <div className="w-6 h-6 rounded-full bg-neutral-600 overflow-hidden">
+                      <div className="w-6 h-6 rounded-full bg-neutral-light overflow-hidden">
                         <img 
-                          src={dm.avatar} 
-                          alt={dm.name}
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.src = `https://via.placeholder.com/32?text=${dm.name.charAt(0)}`;
-                          }}
+                            src={`https://ui-avatars.com/api/?name=${encodeURIComponent(dm.name)}&background=random&color=fff&size=32`} 
+                            alt={dm.name}
+                            className="w-full h-full object-cover"
                         />
                       </div>
                       <div 
-                        className={`absolute bottom-0 right-0 w-2 h-2 rounded-full border border-neutral-800 ${dm.status === 'online' ? 'bg-green-500' : dm.status === 'idle' ? 'bg-yellow-500' : dm.status === 'dnd' ? 'bg-red-500' : 'bg-neutral-500'}`}
+                        className={`absolute bottom-0 right-0 w-2 h-2 rounded-full border border-white ${dm.status === 'online' ? 'bg-green-500' : dm.status === 'idle' ? 'bg-yellow-500' : dm.status === 'dnd' ? 'bg-red-500' : 'bg-neutral-400'}`}
                       />
                     </div>
                     <span className="flex-1 text-left truncate">{dm.name}</span>
@@ -313,26 +309,22 @@ const VrittiChatView = () => {
             </div>
           </div>
           
-          <div className="p-3 border-t border-neutral-700 flex items-center gap-3">
+          <div className="p-3 border-t border-gray-100 flex items-center gap-3">
             <div className="relative">
-              <div className="w-10 h-10 rounded-full bg-neutral-700 overflow-hidden">
+              <div className="w-10 h-10 rounded-full bg-neutral-light overflow-hidden">
                 <img 
-                  src="/avatar.jpg" 
+                  src="https://ui-avatars.com/api/?name=You&background=6366f1&color=fff&size=40" 
                   alt="Your avatar"
                   className="w-full h-full object-cover"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = `https://via.placeholder.com/40?text=You`;
-                  }}
                 />
               </div>
-              <div className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-green-500 border-2 border-neutral-800" />
+              <div className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-green-500 border-2 border-white" />
             </div>
             <div className="flex-1">
               <div className="font-medium text-sm">You</div>
-              <div className="text-xs text-neutral-400">#student1234</div>
+              <div className="text-xs text-neutral-medium">#student1234</div>
             </div>
-            <button className="text-neutral-400 hover:text-white">
+            <button className="text-neutral-medium hover:text-primary">
               <Settings className="h-5 w-5" />
             </button>
           </div>
@@ -389,9 +381,9 @@ const VrittiChatView = () => {
                       className={`flex ${message.isCurrentUser ? 'justify-end' : 'items-start gap-3'}`}
                     >
                       {!message.isCurrentUser && (
-                        <div className="w-8 h-8 rounded-full bg-neutral-200 overflow-hidden flex-shrink-0 mt-1">
+                        <div className="w-8 h-8 rounded-full bg-neutral-light overflow-hidden flex-shrink-0 mt-1">
                           <img 
-                            src={`/avatar-${message.sender.toLowerCase().replace(' ', '-')}.jpg`} 
+                            src={`https://ui-avatars.com/api/?name=${encodeURIComponent(message.sender)}&background=random&color=fff&size=32`} 
                             alt={message.sender}
                             className="w-full h-full object-cover"
                             onError={(e) => {
@@ -411,7 +403,7 @@ const VrittiChatView = () => {
                         )}
                         
                         <div 
-                          className={`rounded-lg py-2 px-3 ${message.isCurrentUser ? 'bg-primary text-white' : 'bg-neutral-100 text-neutral-800'}`}
+                          className={`rounded-lg py-2 px-3 ${message.isCurrentUser ? 'bg-primary text-white' : 'bg-neutral-light text-neutral-dark'}`}
                         >
                           {message.content}
                         </div>
@@ -459,13 +451,9 @@ const VrittiChatView = () => {
             <div className="flex flex-col items-center text-center mb-6">
               <div className="w-20 h-20 rounded-full bg-neutral-200 mb-3 overflow-hidden">
                 <img 
-                  src="/avatar-user.jpg" 
+                  src="https://ui-avatars.com/api/?name=User&background=random&color=fff&size=80" 
                   alt="User"
                   className="w-full h-full object-cover"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = `https://via.placeholder.com/80?text=U`;
-                  }}
                 />
               </div>
               <h3 className="font-bold text-neutral-800">Username</h3>

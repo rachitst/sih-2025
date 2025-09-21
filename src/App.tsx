@@ -38,9 +38,9 @@ function App() {
             <Route path="/spotify" element={<SpotifyView />} />
             <Route path="/volunteer" element={<VolunteerView />} />
             <Route path="/vritti-chat" element={<VrittiChatView />} />
-            <Route path="/counsellor" element={<CounsellorPortal />} />
-            <Route path="/admin" element={<AdminDashboard />} />
           </Route>
+          <Route path="/counsellor" element={<CounsellorPortal />} />
+          <Route path="/admin" element={<AdminDashboard />} />
         </Routes>
       </AnimatePresence>
     </>
