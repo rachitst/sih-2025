@@ -7,6 +7,14 @@ import CounsellorPortal from './pages/CounsellorPortal';
 import AdminDashboard from './pages/AdminDashboard';
 import Layout from './components/Layout';
 
+// Import view components
+import DashboardView from './pages/DashboardView';
+import ChatbotView from './pages/ChatbotView';
+import ResourcesView from './pages/ResourcesView';
+import BookingView from './pages/BookingView';
+import SupportView from './pages/SupportView';
+import ToolsView from './pages/ToolsView';
+
 function App() {
   const location = useLocation();
 
@@ -17,7 +25,12 @@ function App() {
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<LandingPage />} />
           <Route element={<Layout />}>
-            <Route path="/dashboard" element={<StudentDashboard />} />
+            <Route path="/dashboard" element={<DashboardView />} />
+            <Route path="/chat" element={<ChatbotView />} />
+            <Route path="/resources" element={<ResourcesView />} />
+            <Route path="/booking" element={<BookingView />} />
+            <Route path="/support" element={<SupportView />} />
+            <Route path="/tools" element={<ToolsView />} />
             <Route path="/counsellor" element={<CounsellorPortal />} />
             <Route path="/admin" element={<AdminDashboard />} />
           </Route>

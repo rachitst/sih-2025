@@ -298,6 +298,7 @@ const StudentDashboard = () => {
       // Check if PHQ-9 assessment has been completed
       const phq9Completed = localStorage.getItem('vritti_phq9_completed');
       if (phq9Completed !== 'true') {
+        // Show PHQ-9 assessment if not completed
         setShowPHQ9(true);
       } else {
         // Load PHQ-9 results if available
@@ -307,6 +308,7 @@ const StudentDashboard = () => {
         if (savedSeverity) setPHQ9Severity(savedSeverity);
       }
     } else {
+      // Show onboarding if no user name
       setShowOnboarding(true);
     }
 
@@ -331,13 +333,18 @@ const StudentDashboard = () => {
     return 'Good evening';
   };
 
+  // Determine if we should show the main dashboard content
+  const showMainContent = !showOnboarding && !showPHQ9;
+
   return (
     <div className="min-h-screen bg-neutral-light p-4 sm:p-6 lg:p-8">
       <OnboardingModal show={showOnboarding} onSave={handleSaveName} />
       <PHQ9Modal show={showPHQ9} onComplete={handlePHQ9Complete} />
       
-      {/* Header */}
-      <motion.div 
+      {showMainContent && (
+        <>
+        {/* Header */}
+        <motion.div 
         initial={{ y: -30, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
@@ -460,6 +467,8 @@ const StudentDashboard = () => {
           </motion.div>
         </div>
       </div>
+      </>
+      )}
     </div>
   );
 };
