@@ -17,7 +17,7 @@ import ComplaintView from './pages/ComplaintView';
 import SpotifyView from './pages/SpotifyView';
 import VolunteerView from './pages/VolunteerView';
 import VrittiChatView from './pages/VrittiChatView';
-import VrittiAIWidget from './Vapi';
+import VrittiAIWidget from './components/Vapi';
 
 function App() {
   const location = useLocation();
